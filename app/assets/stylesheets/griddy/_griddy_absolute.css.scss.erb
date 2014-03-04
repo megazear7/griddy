@@ -1,0 +1,280 @@
+.grid_section {
+	overflow:hidden;
+	text-align: center;
+	float:left;
+	position: relative; // this is to allow text (or other dom elements) to be positioned absoluteing within the grid_sections
+}
+
+.last_sub_section {
+	margin-right: 0px !important;
+}
+
+.sidebar {
+	width: $sidebar_width - 1 * $margin;
+	margin-right: $margin;
+	margin-bottom: $margin;
+}
+
+.example_box {
+	float: left;
+
+	// Change the numbers in this block to customize the perk section
+	$icon_padding: 5px; // to change the padding of the pone list elelments change this value
+	$fract_height: 4/5; // to change the size of this proportion (must be between 0 and 1 exclusive)
+	$containing_height: 1; // if the height of the containing element is changed change this to corrospond to it
+	$number_of_icons: 5;
+	$container_width: 1;
+	$margin_ratio: (2/1); // this is the ratio of vertical margins to horzontal margins. So if you want 
+							// the vertical margins to be twice that of the horizontal margins, make this
+							// number (2/1)
+
+	// don't change this stuff
+	padding: $icon_padding;
+	$this_margin: ((($height*($containing_height)) - $margin) * ((1/2)*(1-$fract_height))) - ($icon_padding / 2);
+	$vertical_margin: $this_margin * $margin_ratio;
+	height: ((((($height*($containing_height)) - $margin) * ($fract_height)) - $icon_padding) - 2 * ($vertical_margin - $this_margin));
+	margin: $this_margin;
+	margin-top: $vertical_margin;
+	margin-bottom: $vertical_margin;
+	$perk_con_partial_width: ((($page*($container_width)) - $margin - $number_of_icons * 2 * ($this_margin + $icon_padding)) * (1/$number_of_icons));
+	width: $perk_con_partial_width;
+}
+
+@function pref($val) {
+	@if ($val == 1) {
+		@return "one"
+	} @else if ($val == 2) {
+		@return "two"
+	} @else if ($val == 3) {
+		@return "three"
+	} @else if ($val == 4) {
+		@return "four"
+	} @else if ($val == 5) {
+		@return "five"
+	} @else if ($val == 6) {
+		@return "six"
+	} @else if ($val == 7) {
+		@return "seven"
+	} @else if ($val == 8) {
+		@return "eight"
+	}
+	@return "error"
+}
+
+@function suf($pref, $val) {
+	@if ($pref == 1) {
+		@if ($val == 1) {
+			@return ""
+		} @else if ($val == 2) {
+			@return "_half"
+		} @else if ($val == 3) {
+			@return "_third"
+		} @else if ($val == 4) {
+			@return "_fourth"
+		} @else if ($val == 5) {
+			@return "_fifth"
+		} @else if ($val == 6) {
+			@return "_sixth"
+		} @else if ($val == 7) {
+			@return "_seventh"
+		} @else if ($val == 8) {
+			@return "_eighth"
+		}
+	} @else {
+		@if ($val == 1) {
+			@return ""
+		} @else if ($val == 2) {
+			@return "_halves"
+		} @else if ($val == 3) {
+			@return "_thirds"
+		} @else if ($val == 4) {
+			@return "_fourths"
+		} @else if ($val == 5) {
+			@return "_fifths"
+		} @else if ($val == 6) {
+			@return "_sixths"
+		} @else if ($val == 7) {
+			@return "_sevenths"
+		} @else if ($val == 8) {
+			@return "_eighths"
+		}
+	}
+	@if ($pref == 1 and $val == 1) {
+		@return ""
+	}
+	@return "error"
+}
+
+$pref_min: 1;
+$pref_max: 8;
+$suf_min: 1;
+$suf_max: 5;
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k and $k > 1) or ($i == 1 and $k == 1) {
+			.width_#{pref($i)}#{suf($i, $k)}_no_margin {
+				width:($page*($i/$k));
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k and $k > 1) or ($i == 1 and $k == 1) {
+			.width_#{pref($i)}#{suf($i, $k)} {
+				width:($page*($i/$k) - 1 * $margin);
+				margin-right: $margin;
+				margin-bottom: $margin;
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k and $k > 1) or ($i == 1 and $k == 1) {
+			.width_#{pref($i)}#{suf($i, $k)}_padded {
+				width:($page*($i/$k) - 1 * $margin - 2 * $padding);
+				padding-left: $padding;
+				padding-right: $padding;
+				margin-right: $margin;
+				margin-bottom: $margin;
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k and $k > 1) or ($i == 1 and $k == 1) {
+			.width_#{pref($i)}#{suf($i, $k)}_padded_no_margin {
+				width:($page*($i/$k) - 1 * $margin - 2 * $padding);
+				padding-left: $padding;
+				padding-right: $padding;
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k) or ($i == 1 and $k == 1) {
+			.height_#{pref($i)}#{suf($i, $k)}_no_margin {
+				height:($height*($i/$k));
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k) or ($i == 1 and $k == 1) {
+			.height_#{pref($i)}#{suf($i, $k)} {
+				height:($height*($i/$k) - 1 * $margin);
+				margin-right: $margin;
+				margin-bottom: $margin;
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k) or ($i == 1 and $k == 1) {
+			.height_#{pref($i)}#{suf($i, $k)}_padded {
+				height:($height*($i/$k) - 1 * $margin - 2 * $padding);
+				padding-top: $padding;
+				padding-bottom: $padding;
+				margin-right: $margin;
+				margin-bottom: $margin;
+			}
+		}
+	}
+}
+
+@for $i from $pref_min through $pref_max {
+	@for $k from $suf_min through $suf_max {
+		@if ($i != $k) or ($i == 1 and $k == 1) {
+			.height_#{pref($i)}#{suf($i, $k)}_padded_no_margin {
+				height:($height*($i/$k) - 1 * $margin - 2 * $padding);
+				padding-top: $padding;
+				padding-bottom: $padding;
+			}
+		}
+	}
+}
+
+.parchment_white_back {
+	background-color:rgb(236,227,190);
+}
+
+.blue_grey_back {
+	background-color:#3D5998;
+}
+
+.grey_back {
+	background-color:#ddd;
+}
+
+.light_grey_back {
+	background-color:#eee;
+}
+
+.purple_back {
+	background-color:#35285E;
+}
+
+.orange_back {
+	background-color:#E89900;
+}
+
+.white_back {
+	background-color:#fff;
+}
+
+.cream_back {
+	background-color:#fffdd0;
+}
+
+.black_back {
+	background-color:#000;
+}
+
+.blue_back {
+	background-color:#0093cf;
+}
+
+.khaki_back {
+	background-color: rgb(204,204,154);
+}
+
+.cream_edge {
+	box-shadow: 0 0 0 $edge_color_width #fffdd0 inset;
+}
+
+.khaki_edge {
+	box-shadow: 0 0 0 $edge_color_width rgb(204,204,154) inset;
+}
+
+.light_blue_edge {
+	box-shadow: 0 0 0 $edge_color_width rgb(154,204,204) inset;
+}
+
+.pink_edge {
+	box-shadow: 0 0 0 $edge_color_width rgb(204,154,154) inset;
+}
+
+.dark_blue_edge {
+
+	box-shadow: 0 0 0 $edge_color_width rgb(154,154,204) inset;
+}
+
+.purple_edge {
+	box-shadow: 0 0 0 $edge_color_width rgb(204,154,204) inset;
+}
+
+.green_edge {
+	box-shadow: 0 0 0 $edge_color_width rgb(154,204,154) inset;
+}
